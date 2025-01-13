@@ -40,7 +40,7 @@ const HomeScene: React.FC = () => {
     // base floor
     const cylinderGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.6, 32);
     const cylinderMaterial = new THREE.MeshStandardMaterial({
-      color: 0xcdb4db,
+      color: 0xff006e,
     });
     const cylinder = new THREE.Mesh(cylinderGeo, cylinderMaterial);
     cylinder.position.y = -0.02;
