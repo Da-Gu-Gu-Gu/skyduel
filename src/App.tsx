@@ -1,8 +1,12 @@
 
+import Home from "./pages/Home"
+
 
 const App = () => {
   return (
-    <div>App</div>
+    <div className=" w-screen h-screen">
+      <Home />
+    </div>
   )
 }
 
