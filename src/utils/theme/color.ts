@@ -6,3 +6,26 @@ export const colors = {
   dark: "#14213d",
   orange: "#ff7e67",
 };
+
+export const customizeColors = [
+  "#E63946",
+  "#F1FAEE",
+  "#A8DADC",
+  "#457B9D",
+  "#1D3557",
+  "#FFC300",
+  "#FF5733",
+  "#C70039",
+  "#900C3F",
+  "#581845",
+  "#6A0572",
+  "#BF1363",
+  "#FF764A",
+  "#43AA8B",
+  "#253D5B",
+  "#8AC926",
+  "#1982C4",
+  "#6A4C93",
+  "#FF595E",
+  "#FFCA3A",
+];

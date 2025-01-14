@@ -2,8 +2,12 @@ import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { CategoryColorsProp } from "../../components/Modal/ColorPicker";
+interface HomeSceneProp {
+  modalColors: CategoryColorsProp
+}
 
-const HomeScene: React.FC = () => {
+const HomeScene = ({ modalColors }: HomeSceneProp) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mount = useRef<HTMLDivElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
@@ -51,19 +55,22 @@ const HomeScene: React.FC = () => {
     // character
     const loader = new GLTFLoader();
     loader.load(
-      "./character.glb",
+      "./hero.glb",
       (gltf) => {
         modelRef.current = gltf.scene;
-        modelRef.current.scale.set(0.08, 0.08, 0.08);
+        modelRef.current.scale.set(0.4, 0.4, 0.4);
+        modelRef.current.rotation.z = Math.PI
+        modelRef.current.rotation.y = Math.PI / 2
         modelRef.current.position.z = 0.2;
-        modelRef.current.position.set(0, -0.8, 0.2);
+        modelRef.current.position.set(0, -0.4, 0.03);
         camera.lookAt(modelRef.current.position);
         scene.add(gltf.scene);
-
+        console.log(scene, gltf)
         gltf.scene.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
+
           }
         });
       },
@@ -111,6 +118,27 @@ const HomeScene: React.FC = () => {
       mount?.current?.removeChild(renderer.domElement);
     };
   }, []);
+
+  useEffect(() => {
+    if (modelRef.current) {
+      modelRef.current.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          if (child.name === "body") {
+            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Body);
+          }
+          if (child.name === "face") {
+            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Face);
+          }
+          if (child.name === "ear-l" || child.name === "ear-r") {
+            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Ear);
+          }
+          if (child.name === "eye-l" || child.name === "eye-r") {
+            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Eye);
+          }
+        }
+      });
+    }
+  }, [modalColors]);
 
   return (
     <div
