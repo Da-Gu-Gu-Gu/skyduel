@@ -15,12 +15,14 @@ const Home = () => {
         Eye: '#FFFFFF',
         Ear: '#FFFFFF',
     });
+    const [selectedPart, setSelectedPart] = useState<'Body' | 'Face' | 'Eye' | 'Ear'>('Body')
 
     const handleColorClick = (color: string, selectedCategory: 'Body' | 'Face' | 'Eye' | 'Ear') => {
         setCategoryColors(prev => ({
             ...prev,
             [selectedCategory]: color,
         }));
+        setSelectedPart(selectedCategory)
     };
     return (
         <div className="w-full h-full relative">
@@ -31,7 +33,7 @@ const Home = () => {
                     style={{ WebkitTextStroke: "0px white" }}
                     className="text-6xl text-stroke font-bold text-dark"
                 >
-                    <span className="text-[#ff006e]">Su</span>Su
+                    <span className="text-[#ff006e]">Sky</span>Duel
                 </h1>
                 <h1 className="text-3xl text-pink bg-white py-2 pt-4 px-4 rounded-3xl flex items-center">Gu Gu Gr Gr</h1>
             </header>
@@ -58,7 +60,7 @@ const Home = () => {
                 </div>
             </div>
             <div className="z-10 absolute top-0">
-                <HomeScene modalColors={categoryColors} />
+                <HomeScene modalColors={categoryColors} selectedPart={selectedPart} />
             </div>
         </div>
     );

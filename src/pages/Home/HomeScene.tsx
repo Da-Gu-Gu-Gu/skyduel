@@ -5,9 +5,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CategoryColorsProp } from "../../components/Modal/ColorPicker";
 interface HomeSceneProp {
   modalColors: CategoryColorsProp
+  selectedPart: 'Body' | 'Ear' | 'Eye' | 'Face'
 }
 
-const HomeScene = ({ modalColors }: HomeSceneProp) => {
+const HomeScene = ({ modalColors, selectedPart }: HomeSceneProp) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mount = useRef<HTMLDivElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
@@ -120,20 +121,61 @@ const HomeScene = ({ modalColors }: HomeSceneProp) => {
   }, []);
 
   useEffect(() => {
+    const highlightBody = (mesh: THREE.Mesh, scale = 1.2) => {
+      const originalScale = mesh.scale.clone(); // Store original scale
+      const highlightScale = originalScale.clone().multiplyScalar(scale); // Slightly larger scale
+      const duration = 300; // Animation duration in ms
+      const startTime = performance.now();
+
+      const animateHighlight = (time: number) => {
+        const elapsed = time - startTime;
+        const t = Math.min(elapsed / duration, 1); // Normalized time [0, 1]
+
+        // Interpolate between originalScale and highlightScale
+        mesh.scale.lerpVectors(originalScale, highlightScale, t);
+
+        if (elapsed < duration) {
+          requestAnimationFrame(animateHighlight);
+        } else {
+          // Reverse the animation
+          const reverseStartTime = performance.now();
+
+          const animateReverse = (reverseTime: number) => {
+            const reverseElapsed = reverseTime - reverseStartTime;
+            const reverseT = Math.min(reverseElapsed / duration, 1);
+
+            // Interpolate back to the original scale
+            mesh.scale.lerpVectors(highlightScale, originalScale, reverseT);
+
+            if (reverseElapsed < duration) {
+              requestAnimationFrame(animateReverse);
+            }
+          };
+
+          requestAnimationFrame(animateReverse);
+        }
+      };
+
+      requestAnimationFrame(animateHighlight);
+    };
     if (modelRef.current) {
       modelRef.current.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
           if (child.name === "body") {
-            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Body);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Body);
+            if (selectedPart === 'Body') highlightBody(child as THREE.Mesh, 1.02)
           }
           if (child.name === "face") {
-            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Face);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Face);
+            if (selectedPart === 'Face') highlightBody(child as THREE.Mesh, 1.03)
           }
           if (child.name === "ear-l" || child.name === "ear-r") {
-            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Ear);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Ear);
+            if (selectedPart === 'Ear') highlightBody(child as THREE.Mesh)
           }
           if (child.name === "eye-l" || child.name === "eye-r") {
-            (child as THREE.Mesh).material.color = new THREE.Color(modalColors.Eye);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Eye);
+            if (selectedPart === 'Eye') highlightBody(child as THREE.Mesh)
           }
         }
       });
