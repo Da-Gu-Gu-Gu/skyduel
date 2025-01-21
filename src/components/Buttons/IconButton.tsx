@@ -1,5 +1,5 @@
 import { disableStyle } from './Button'
-import LoadingSpinner from './LoadingSpinner'
+import LoadingSpinner from '../Loading/LoadingSpinner'
 
 interface IconButtonProps {
     icon: JSX.Element,

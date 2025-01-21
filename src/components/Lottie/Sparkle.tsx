@@ -1,5 +1,5 @@
 import Lottie from "react-lottie";
-import animationData from "../assets/data/Animation.json";
+import animationData from "../../assets/data/Animation.json";
 
 const LottieAnimation = () => {
     const defaultOptions = {

@@ -2,13 +2,13 @@ import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { CategoryColorsProp } from "../../components/Modal/ColorPicker";
-interface HomeSceneProp {
-  modalColors: CategoryColorsProp
-  selectedPart: 'Body' | 'Ear' | 'Eye' | 'Face'
-}
+import useContainer from "./useContainer";
 
-const HomeScene = ({ modalColors, selectedPart }: HomeSceneProp) => {
+
+const HomeScene = () => {
+
+  const { bodyPartColor, selectedPart } = useContainer()
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mount = useRef<HTMLDivElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
@@ -162,25 +162,25 @@ const HomeScene = ({ modalColors, selectedPart }: HomeSceneProp) => {
       modelRef.current.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
           if (child.name === "body") {
-            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Body);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Body);
             if (selectedPart === 'Body') highlightBody(child as THREE.Mesh, 1.02)
           }
           if (child.name === "face") {
-            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Face);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Face);
             if (selectedPart === 'Face') highlightBody(child as THREE.Mesh, 1.03)
           }
           if (child.name === "ear-l" || child.name === "ear-r") {
-            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Ear);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Ear);
             if (selectedPart === 'Ear') highlightBody(child as THREE.Mesh)
           }
           if (child.name === "eye-l" || child.name === "eye-r") {
-            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(modalColors.Eye);
+            ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Eye);
             if (selectedPart === 'Eye') highlightBody(child as THREE.Mesh)
           }
         }
       });
     }
-  }, [modalColors]);
+  }, [bodyPartColor]);
 
   return (
     <div

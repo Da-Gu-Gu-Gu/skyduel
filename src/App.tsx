@@ -1,12 +1,13 @@
 
 import Home from "./pages/Home"
+import GlobalProvider from "./Provider/GlobalProvider"
 
 
 const App = () => {
   return (
-    <div className=" w-screen h-screen">
+    <GlobalProvider>
       <Home />
-    </div>
+    </GlobalProvider>
   )
 }
 

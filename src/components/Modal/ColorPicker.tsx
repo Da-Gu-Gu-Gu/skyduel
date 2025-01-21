@@ -1,30 +1,11 @@
 import { JSX } from 'react/jsx-runtime';
-import { useState } from 'react';
 import Modal, { ModalProps } from './Modal';
 import { customizeColors } from '../../utils/theme/color';
-
-export interface CategoryColorsProp {
-    Body: string,
-    Face: string;
-    Eye: string;
-    Ear: string;
-
-}
-
-interface Props extends ModalProps {
-    handleColorClick: (color: string, selectedCategory: 'Body' | 'Face' | 'Eye' | 'Ear') => void,
-    categoryColors: CategoryColorsProp
-}
-
-const ColorPicker = (props: Props): JSX.Element => {
-    const [selectedCategory, setSelectedCategory] = useState<'Body' | 'Face' | 'Eye' | 'Ear'>('Body');
+import useContainer from '../../pages/Home/useContainer';
 
 
-    const handleCategoryClick = (category: 'Body' | 'Face' | 'Eye' | 'Ear') => {
-        setSelectedCategory(category);
-    };
-
-
+const ColorPicker = (props: ModalProps): JSX.Element => {
+    const { selectedPart, setSelectedPart, handleColorClick, bodyPartColor } = useContainer()
 
     return (
         <Modal {...props}>
@@ -35,9 +16,9 @@ const ColorPicker = (props: Props): JSX.Element => {
                     {['Body', 'Face', 'Eye', 'Ear'].map(category => (
                         <button
                             key={category}
-                            className={`text-center uppercase py-1 px-2 ${selectedCategory === category ? ' text-white' : ' text-gray-400'
+                            className={`text-center uppercase py-1 px-2 ${selectedPart === category ? ' text-white' : ' text-gray-400'
                                 }`}
-                            onClick={() => handleCategoryClick(category as 'Body' | 'Face' | 'Eye' | 'Ear')}
+                            onClick={() => setSelectedPart(category as 'Body' | 'Face' | 'Eye' | 'Ear')}
                         >
                             {category}
                         </button>
@@ -48,10 +29,10 @@ const ColorPicker = (props: Props): JSX.Element => {
                     {customizeColors.map((color, index) => (
                         <div
                             key={index}
-                            className={`cursor-pointer h-5 border-2 ${props.categoryColors[selectedCategory] === color ? 'border-white' : 'border-dark'
+                            className={`cursor-pointer h-5 border-2 ${bodyPartColor[selectedPart] === color ? 'border-white' : 'border-dark'
                                 }`}
                             style={{ backgroundColor: color }}
-                            onClick={() => props.handleColorClick(color, selectedCategory)}
+                            onClick={() => handleColorClick(color, selectedPart)}
                         ></div>
                     ))}
                 </div>

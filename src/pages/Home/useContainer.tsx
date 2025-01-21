@@ -1,0 +1,49 @@
+import { useRecoilState } from 'recoil'
+import { BodyPart, bodyPartColors, bodyPart, homeModalOpenState, ModalOpenState } from './store/home.store'
+
+
+const useContainer = () => {
+    const [bodyPartColor, setBodyPartColor] = useRecoilState(bodyPartColors)
+    const [selectedPart, setSelectedPart] = useRecoilState(bodyPart)
+
+    const [modalOpenState, setModalOpenState] = useRecoilState(homeModalOpenState)
+
+
+    const modalStateHandler = (modal: keyof ModalOpenState) => {
+        setModalOpenState(prev => ({
+            ...prev,
+            [modal]: !prev[modal]
+        }))
+    }
+
+    const modalClose = () => {
+        setModalOpenState({
+            colorPicker: false,
+            settings: false,
+            help: false,
+            createLobby: false,
+        })
+    }
+
+    const handleColorClick = (color: string, selectedCategory: BodyPart) => {
+        setBodyPartColor(prev => ({
+            ...prev,
+            [selectedCategory]: color,
+        }));
+        setSelectedPart(selectedCategory)
+    };
+
+
+
+    return {
+        bodyPartColor,
+        selectedPart,
+        handleColorClick,
+        modalOpenState,
+        modalClose,
+        setSelectedPart,
+        modalStateHandler
+    }
+}
+
+export default useContainer

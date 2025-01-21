@@ -1,5 +1,5 @@
 import { CSSProperties } from "react"
-import LoadingSpinner from "./LoadingSpinner"
+import LoadingSpinner from "../Loading/LoadingSpinner"
 
 
 interface ButtonProps {

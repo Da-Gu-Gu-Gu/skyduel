@@ -1,4 +1,4 @@
-import Sparkle from "./Sparkle"
+import Sparkle from "../Lottie/Sparkle"
 interface BackgroundProps {
     isHome?: boolean
 }
