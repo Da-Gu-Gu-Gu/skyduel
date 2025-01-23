@@ -10,10 +10,15 @@ const useContainer = () => {
 
 
     const modalStateHandler = (modal: keyof ModalOpenState) => {
-        setModalOpenState(prev => ({
-            ...prev,
-            [modal]: !prev[modal]
-        }))
+        setModalOpenState(prev => {
+            const newState = Object.keys(prev).reduce((acc, key) => {
+                acc[key as keyof ModalOpenState] = key === modal ? !prev[modal] : false;
+                return acc;
+            }, {} as ModalOpenState);
+
+            return newState;
+
+        })
     }
 
     const modalClose = () => {
@@ -22,6 +27,7 @@ const useContainer = () => {
             settings: false,
             help: false,
             createLobby: false,
+            joinLobby: false
         })
     }
 

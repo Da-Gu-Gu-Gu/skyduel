@@ -6,29 +6,18 @@ import { colors } from "../../utils/theme/color";
 import HomeScene from "./HomeScene";
 import { Cog6ToothIcon, PaintBrushIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import useContainer from "./useContainer";
+import CreateLobbyModal from "../../components/Modal/CreateLobby";
+import JoinLobbyModal from "../../components/Modal/JoinLobby";
 
 const Home = () => {
     const { modalOpenState, modalStateHandler, modalClose } = useContainer()
-    // const [open, setOpen] = useState(false)
-    // const [categoryColors, setCategoryColors] = useState({
-    //     Body: '#FFFFFF',
-    //     Face: '#FFFFFF',
-    //     Eye: '#FFFFFF',
-    //     Ear: '#FFFFFF',
-    // });
-    // const [selectedPart, setSelectedPart] = useState<'Body' | 'Face' | 'Eye' | 'Ear'>('Body')
 
-    // const handleColorClick = (color: string, selectedCategory: 'Body' | 'Face' | 'Eye' | 'Ear') => {
-    //     setCategoryColors(prev => ({
-    //         ...prev,
-    //         [selectedCategory]: color,
-    //     }));
-    //     setSelectedPart(selectedCategory)
-    // };
     return (
         <div className="w-full h-full relative">
             <Background />
             {modalOpenState.colorPicker && <ColorPicker setClose={modalClose} left="20px" top="35%" onSubmit={() => modalStateHandler('colorPicker')} />}
+            {modalOpenState.createLobby && <CreateLobbyModal setClose={modalClose} isCenter left="50%" top="50%" onSubmit={() => modalStateHandler('createLobby')} label="Create" />}
+            {modalOpenState.joinLobby && <JoinLobbyModal setClose={modalClose} isCenter left="50%" top="50%" onSubmit={() => modalStateHandler('joinLobby')} label="Join" />}
             <header className="absolute z-20 flex items-center justify-between w-full top-0 p-5">
                 <h1
                     style={{ WebkitTextStroke: "0px white" }}
@@ -51,12 +40,15 @@ const Home = () => {
                         textColor={colors.purple}
                         bgColor={colors.white}
                         loading={false}
+                        onClick={() => modalStateHandler('joinLobby')}
                     />
                     <Button
                         label="Create Lobby"
                         textColor={colors.pink}
                         bgColor={colors.white}
                         loading={false}
+                        onClick={() => modalStateHandler('createLobby')}
+
                     />
                 </div>
             </div>

@@ -11,14 +11,15 @@ export interface ModalProps {
     left: CSSProperties['left']
     onSubmit?: () => void
     label?: string
+    isCenter?: boolean
 }
-const Modal = ({ children, setClose, loading, disable, top, left, onSubmit, label = "Save" }: ModalProps) => {
+const Modal = ({ children, isCenter = false, setClose, loading, disable, top, left, onSubmit, label = "Save" }: ModalProps) => {
     return (
         <div style={{
             position: "fixed",
             top: top,
             left: left
-        }} className=" z-20 p-2 rounded-lg bg-pink" >
+        }} className={`z-20 p-2 rounded-lg bg-pink ${isCenter && '-translate-x-1/2 -translate-y-1/2'}`} >
             {children}
             <div className="flex gap-3 items-center justify-end">
                 <Button label={"Cancel"} loading={loading} disable={disable} onClick={() => setClose()} bgColor={colors.white} textColor={'gray'} />
