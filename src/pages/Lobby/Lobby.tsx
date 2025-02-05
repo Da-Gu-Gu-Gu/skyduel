@@ -15,13 +15,14 @@ const Lobby = () => {
         { emoji: "😢", onClick: () => console.log("Sad clicked") },
         { emoji: "😡", onClick: () => console.log("Angry clicked") },
     ]
+    const waitPlayer = false
     return (
         <MainLayout inLobby>
             <EmoteCircle emotes={emotes} size={400} />
             <div className="absolute z-20 bottom-10 right-10 flex flex-col items-end gap-2 ">
 
                 <Button
-                    label={false ? "Wait Other Player" : "Start Game"}
+                    label={waitPlayer ? "Wait Other Player" : "Start Game"}
                     bgColor={colors.pink}
                     textColor={colors.white}
                     loading={false}
