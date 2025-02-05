@@ -13,7 +13,7 @@ const LottieAnimation = () => {
 
     return (
         <div>
-            <Lottie options={defaultOptions} height={300} width={300} />
+            <Lottie options={defaultOptions} height={500} width={500} />
         </div>
     );
 };

@@ -17,3 +17,6 @@
     font-family: 'Luckiest Guy', cursive;
   }
   
+  .stroke-text {
+    -webkit-text-stroke: 2px white; /* Text stroke width and color */
+}
