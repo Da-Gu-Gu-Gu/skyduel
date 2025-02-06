@@ -12,5 +12,5 @@ const App = () => {
     </GlobalProvider>
   )
 }
-
+  
 export default App

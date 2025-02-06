@@ -27,7 +27,8 @@ const useContainer = () => {
             settings: false,
             help: false,
             createLobby: false,
-            joinLobby: false
+            joinLobby: false,
+            emote: false,
         })
     }
 

@@ -3,8 +3,10 @@ import MainLayout from '../../layout/Main'
 import Button from '../../components/Buttons/Button'
 import { colors } from '../../utils/theme/color'
 import EmoteCircle from '../../components/EmoteCircle/EmoteCircle'
+import useContainer from '../Home/useContainer'
 
 const Lobby = () => {
+    const { modalOpenState } = useContainer()
     const emotes = [
         { emoji: "😊", onClick: () => console.log("Happy clicked") },
         { emoji: "😂", onClick: () => console.log("Laughing clicked") },
@@ -18,7 +20,7 @@ const Lobby = () => {
     const waitPlayer = false
     return (
         <MainLayout inLobby>
-            <EmoteCircle emotes={emotes} size={400} />
+            {modalOpenState.emote && <EmoteCircle emotes={emotes} size={400} />}
             <div className="absolute z-20 bottom-10 right-10 flex flex-col items-end gap-2 ">
 
                 <Button

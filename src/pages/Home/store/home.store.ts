@@ -15,6 +15,7 @@ export interface ModalOpenState {
   help: boolean;
   createLobby: boolean;
   joinLobby: boolean;
+  emote: boolean;
 }
 
 export const bodyPartColors = atom<BodyPartColors>({
@@ -40,5 +41,6 @@ export const homeModalOpenState = atom<ModalOpenState>({
     help: false,
     createLobby: false,
     joinLobby: false,
+    emote: false,
   },
 });

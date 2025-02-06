@@ -33,7 +33,7 @@ const MainLayout = ({ inLobby = false, children }: MainLayoutProps) => {
                     <IconButton icon={<QuestionMarkCircleIcon className="h-10 w-10 text-white hover:text-pink" />} />
                     <div className="flex gap-3">
                         <IconButton icon={<Cog6ToothIcon className="h-10 w-10 text-white hover:text-pink" />} />
-                        {inLobby && <IconButton icon={<FaceSmileIcon className="h-10 w-10 text-white hover:text-purple" />} />}
+                        {inLobby && <IconButton onClick={() => modalStateHandler('emote')} icon={<FaceSmileIcon className="h-10 w-10 text-white hover:text-purple" />} />}
                     </div>
                 </div>
             </div>
