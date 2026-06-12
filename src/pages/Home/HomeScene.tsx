@@ -1,10 +1,13 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { gsap } from "gsap";
 import useContainer from "./useContainer";
 
-const HomeScene = ({ inLobby = false }) => {
+const CHARACTER_BASE_Y = -0.4;
+
+const HomeScene = ({ inLobby = true }) => {
   const { bodyPartColor, selectedPart } = useContainer();
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -14,21 +17,15 @@ const HomeScene = ({ inLobby = false }) => {
     player: null,
     otherPlayer: null,
   });
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeModel, setActiveModel] = useState<"player" | "otherPlayer">("player");
+  const cylinderRefs = useRef<THREE.Mesh[]>([]);
+  const entryDone = useRef<{ player: boolean; otherPlayer: boolean }>({ player: false, otherPlayer: false });
 
   useEffect(() => {
     const scene = new THREE.Scene();
     const container = containerRef.current;
     scene.background = null;
 
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      (container?.clientWidth ?? 1) / (container?.clientHeight ?? 1),
-      1,
-      1000
-    );
+    const camera = new THREE.PerspectiveCamera(75, (container?.clientWidth ?? 1) / (container?.clientHeight ?? 1), 1, 1000);
     camera.position.set(0, 0.5, 2);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -47,18 +44,23 @@ const HomeScene = ({ inLobby = false }) => {
     controls.enableRotate = !inLobby;
 
     // Base floor cylinders
+    cylinderRefs.current = [];
     const createCylinder = (xPosition: number) => {
       const cylinderGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.6, 32);
       const cylinderMaterial = new THREE.MeshStandardMaterial({ color: 0xff006e });
       const cylinder = new THREE.Mesh(cylinderGeo, cylinderMaterial);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      inLobby ? cylinder.position.set(xPosition, -1.05, 0) : cylinder.position.set(0, -1.05, 0);
+      cylinder.position.set(xPosition, -1.05, 0);
       cylinder.receiveShadow = true;
       scene.add(cylinder);
+      cylinderRefs.current.push(cylinder);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    !inLobby && createCylinder(-1);
+    if (inLobby) {
+      createCylinder(-1);
+      createCylinder(1);
+    } else {
+      createCylinder(0);
+    }
 
     // Load character models
     const loader = new GLTFLoader();
@@ -68,17 +70,27 @@ const HomeScene = ({ inLobby = false }) => {
         (gltf) => {
           const model = gltf.scene;
           model.scale.set(0.4, 0.4, 0.4);
-          model.rotation.z = Math.PI
-          model.rotation.y = rotationY
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          inLobby ? model.position.set(xPosition, -0.4, 0.03) : model.position.set(0, -0.4, 0.03);
+          model.rotation.z = Math.PI;
+          model.rotation.y = rotationY;
+          const finalX = inLobby ? xPosition : 0;
+          model.position.set(finalX, -2, 0.03);
           scene.add(model);
           if (isPlayer) {
             modelRefs.current.player = model;
           } else {
             modelRefs.current.otherPlayer = model;
           }
-
+          // Entry jump: character leaps up from below onto platform
+          gsap.to(model.position, {
+            y: CHARACTER_BASE_Y,
+            duration: 0.7,
+            ease: "back.out(1.5)",
+            delay: isPlayer ? 0 : 0.2,
+            onComplete: () => {
+              if (isPlayer) entryDone.current.player = true;
+              else entryDone.current.otherPlayer = true;
+            },
+          });
         },
         undefined,
         (error) => {
@@ -88,12 +100,31 @@ const HomeScene = ({ inLobby = false }) => {
     };
 
     loadCharacter(-1, Math.PI / 2, true);
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    inLobby && loadCharacter(1, Math.PI / 2, false); //other player modal obj
+    if (inLobby) loadCharacter(1, Math.PI / 2, false);
 
     const animate = () => {
       animationFrameId.current = requestAnimationFrame(animate);
       controls.update();
+
+      const time = Date.now() * 0.001;
+      const { player, otherPlayer } = modelRefs.current;
+
+      // Idle bounce and sway — only after entry animation completes
+      if (player && entryDone.current.player) {
+        player.position.y = CHARACTER_BASE_Y + Math.sin(time * 2.5) * 0.08;
+        player.rotation.z = Math.PI + Math.sin(time * 1.5) * 0.03;
+      }
+      if (otherPlayer && entryDone.current.otherPlayer) {
+        otherPlayer.position.y = CHARACTER_BASE_Y + Math.sin(time * 2.5 + Math.PI * 0.7) * 0.08;
+        otherPlayer.rotation.z = Math.PI + Math.sin(time * 1.5 + Math.PI * 0.7) * 0.03;
+      }
+
+      // Platform pulse
+      cylinderRefs.current.forEach((cyl, i) => {
+        const pulse = 1 + Math.sin(time * 3 + i * Math.PI) * 0.025;
+        cyl.scale.set(pulse, 1, pulse);
+      });
+
       renderer.render(scene, camera);
     };
 
@@ -157,31 +188,30 @@ const HomeScene = ({ inLobby = false }) => {
       requestAnimationFrame(animateHighlight);
     };
 
-    const playerModal = modelRefs.current['player'];
+    const playerModal = modelRefs.current["player"];
     if (playerModal) {
       playerModal.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
           if (child.name === "body") {
             ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Body);
-            if (selectedPart === 'Body') highlightBody(child as THREE.Mesh, 1.02)
+            if (selectedPart === "Body") highlightBody(child as THREE.Mesh, 1.02);
           }
           if (child.name === "face") {
             ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Face);
-            if (selectedPart === 'Face') highlightBody(child as THREE.Mesh, 1.03)
+            if (selectedPart === "Face") highlightBody(child as THREE.Mesh, 1.03);
           }
           if (child.name === "ear-l" || child.name === "ear-r") {
             ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Ear);
-            if (selectedPart === 'Ear') highlightBody(child as THREE.Mesh)
+            if (selectedPart === "Ear") highlightBody(child as THREE.Mesh);
           }
           if (child.name === "eye-l" || child.name === "eye-r") {
             ((child as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new THREE.Color(bodyPartColor.Eye);
-            if (selectedPart === 'Eye') highlightBody(child as THREE.Mesh)
+            if (selectedPart === "Eye") highlightBody(child as THREE.Mesh);
           }
         }
       });
     }
-
-  }, [bodyPartColor, selectedPart, activeModel]);
+  }, [bodyPartColor, selectedPart]);
 
   return (
     <div ref={containerRef} className="w-screen z-10 h-screen flex justify-center">

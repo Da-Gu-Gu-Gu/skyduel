@@ -19,7 +19,7 @@ const Lobby = () => {
     ]
     const waitPlayer = false
     return (
-        <MainLayout inLobby>
+        <MainLayout inLobby={true}>
             {modalOpenState.emote && <EmoteCircle emotes={emotes} size={400} />}
             <div className="absolute z-20 bottom-10 right-10 flex flex-col items-end gap-2 ">
 
