@@ -20,3 +20,15 @@
   .stroke-text {
     -webkit-text-stroke: 2px white; /* Text stroke width and color */
 }
+
+  @keyframes emote-bubble-float {
+    0%   { opacity: 0; transform: translate(-50%, 0) scale(0.4); }
+    12%  { opacity: 1; transform: translate(-50%, -22px) scale(1.15); }
+    20%  { opacity: 1; transform: translate(-50%, -28px) scale(1); }
+    80%  { opacity: 1; transform: translate(-50%, -55px) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -90px) scale(0.9); }
+  }
+
+  .emote-bubble {
+    animation: emote-bubble-float 2.8s ease-out forwards;
+  }

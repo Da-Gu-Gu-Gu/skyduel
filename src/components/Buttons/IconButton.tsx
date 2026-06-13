@@ -11,7 +11,7 @@ interface IconButtonProps {
 
 const IconButton = ({ icon, loading, disable, onClick }: IconButtonProps) => {
     return (
-        <button disabled={loading || disable} onClick={onClick} className={`${disable && disableStyle} bg-dark font-bold py-1 px-2 rounded`}>
+        <button disabled={loading || disable} onClick={onClick} className={`${disable && disableStyle} bg-dark font-bold py-1 px-2 rounded transition-transform duration-300 ease-bounce enabled:hover:scale-[1.08]`}>
             {loading ? <LoadingSpinner /> : icon}
         </button>
     )

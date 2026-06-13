@@ -10,6 +10,8 @@ import HomeScene from "../pages/Home/HomeScene";
 import ColorPicker from "../components/Modal/ColorPicker";
 import CreateLobbyModal from "../components/Modal/CreateLobby";
 import JoinLobbyModal from "../components/Modal/JoinLobby";
+import SettingsModal from "../components/Modal/Settings";
+import AboutModal from "../components/Modal/About";
 
 interface MainLayoutProps {
   inLobby?: boolean;
@@ -25,7 +27,7 @@ const MainLayout = ({ inLobby = false, children }: MainLayoutProps) => {
       <Background />
       <Header />
       {modalOpenState.colorPicker && (
-        <ColorPicker setClose={modalClose} left="20px" top="35%" onSubmit={() => modalStateHandler("colorPicker")} />
+        <ColorPicker setClose={modalClose} left="-20px" top="32%" onSubmit={() => modalStateHandler("colorPicker")} />
       )}
       {modalOpenState.createLobby && (
         <CreateLobbyModal
@@ -40,7 +42,11 @@ const MainLayout = ({ inLobby = false, children }: MainLayoutProps) => {
       {modalOpenState.joinLobby && (
         <JoinLobbyModal setClose={modalClose} isCenter left="50%" top="50%" onSubmit={() => modalStateHandler("joinLobby")} label="Join" />
       )}
-      {inLobby && <Line />}
+      {modalOpenState.settings && (
+        <SettingsModal setClose={modalClose} isCenter left="50%" top="50%" onSubmit={() => modalStateHandler("settings")} />
+      )}
+      {modalOpenState.help && <AboutModal setClose={modalClose} isCenter left="50%" top="50%" onSubmit={modalClose} />}
+      {inLobby && false && <Line />}
       {children}
       <div className="absolute z-20 flex w-max items-end justify-between bottom-0 left-0 p-5">
         <div className="flex flex-col items-start gap-3">
@@ -49,9 +55,15 @@ const MainLayout = ({ inLobby = false, children }: MainLayoutProps) => {
             onClick={() => modalStateHandler("colorPicker")}
             icon={<PaintBrushIcon className="h-10 w-10 text-white hover:text-pink" />}
           />
-          <IconButton icon={<QuestionMarkCircleIcon className="h-10 w-10 text-white hover:text-pink" />} />
+          <IconButton
+            onClick={() => modalStateHandler("help")}
+            icon={<QuestionMarkCircleIcon className="h-10 w-10 text-white hover:text-pink" />}
+          />
           <div className="flex gap-3">
-            <IconButton icon={<Cog6ToothIcon className="h-10 w-10 text-white hover:text-pink" />} />
+            <IconButton
+              onClick={() => modalStateHandler("settings")}
+              icon={<Cog6ToothIcon className="h-10 w-10 text-white hover:text-pink" />}
+            />
             {inLobby && (
               <IconButton
                 onClick={() => modalStateHandler("emote")}

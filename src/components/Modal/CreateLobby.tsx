@@ -8,7 +8,7 @@ const CreateLobbyModal = (props: ModalProps) => {
                 <hr />
                 <div>
                     <p className='text-white'> Pass Code</p>
-                    <input type="text" className="w-[300px] p-2 border-2 border-white rounded-lg" />
+                    <input type="text" className="w-full p-2 border-2 border-white rounded-lg" />
                 </div>
             </div>
         </Modal>

@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil'
-import { BodyPart, bodyPartColors, bodyPart, homeModalOpenState, ModalOpenState } from './store/home.store'
+import { BodyPart, bodyPartColors, bodyPart, homeModalOpenState, ModalOpenState, activeEmoteState } from './store/home.store'
+import type { EmoteType } from './emotes'
 
 
 const useContainer = () => {
@@ -7,6 +8,12 @@ const useContainer = () => {
     const [selectedPart, setSelectedPart] = useRecoilState(bodyPart)
 
     const [modalOpenState, setModalOpenState] = useRecoilState(homeModalOpenState)
+
+    const [activeEmote, setActiveEmote] = useRecoilState(activeEmoteState)
+
+    const triggerEmote = (type: EmoteType) => {
+        setActiveEmote(prev => ({ type, nonce: (prev?.nonce ?? 0) + 1 }))
+    }
 
 
     const modalStateHandler = (modal: keyof ModalOpenState) => {
@@ -49,7 +56,9 @@ const useContainer = () => {
         modalOpenState,
         modalClose,
         setSelectedPart,
-        modalStateHandler
+        modalStateHandler,
+        activeEmote,
+        triggerEmote
     }
 }
 

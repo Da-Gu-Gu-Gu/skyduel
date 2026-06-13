@@ -4,19 +4,17 @@ import Button from '../../components/Buttons/Button'
 import { colors } from '../../utils/theme/color'
 import EmoteCircle from '../../components/EmoteCircle/EmoteCircle'
 import useContainer from '../Home/useContainer'
+import { EMOTES } from '../Home/emotes'
 
 const Lobby = () => {
-    const { modalOpenState } = useContainer()
-    const emotes = [
-        { emoji: "😊", onClick: () => console.log("Happy clicked") },
-        { emoji: "😂", onClick: () => console.log("Laughing clicked") },
-        { emoji: "😍", onClick: () => console.log("Love clicked") },
-        { emoji: "😎", onClick: () => console.log("Cool clicked") },
-        { emoji: "🤔", onClick: () => console.log("Thinking clicked") },
-        { emoji: "😮", onClick: () => console.log("Surprised clicked") },
-        { emoji: "😢", onClick: () => console.log("Sad clicked") },
-        { emoji: "😡", onClick: () => console.log("Angry clicked") },
-    ]
+    const { modalOpenState, triggerEmote, modalClose } = useContainer()
+    const emotes = EMOTES.map(({ emoji, type }) => ({
+        emoji,
+        onClick: () => {
+            triggerEmote(type)
+            modalClose()
+        },
+    }))
     const waitPlayer = false
     return (
         <MainLayout inLobby={true}>

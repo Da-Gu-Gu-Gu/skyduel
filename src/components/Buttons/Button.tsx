@@ -15,7 +15,7 @@ export const disableStyle = '!cursor-not-allowed !bg-gray-300 !text-gray-400'
 const Button = ({ label, loading = false, disable = false, onClick, icon = undefined, bgColor, textColor }: ButtonProps) => {
 
     return (
-        <button onClick={onClick} disabled={loading || disable} style={{ backgroundColor: textColor }} className={` rounded-md  cursor-pointer  w-max pr-1 pb-1 h-[50px]`}>
+        <button onClick={onClick} disabled={loading || disable} style={{ backgroundColor: textColor }} className={` rounded-md  cursor-pointer  w-max pr-1 pb-1 h-[50px] transition-transform duration-300 ease-bounce enabled:hover:scale-[1.08]`}>
             <div style={{
                 backgroundColor: bgColor,
                 color: textColor

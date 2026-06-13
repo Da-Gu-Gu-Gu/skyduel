@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import type { EmoteType } from "../emotes";
 
 export interface BodyPartColors {
   Body: string;
@@ -31,6 +32,12 @@ export const bodyPartColors = atom<BodyPartColors>({
 export const bodyPart = atom<BodyPart>({
   key: "bodyPart",
   default: "Body",
+});
+
+/** The most recently triggered emote. `nonce` lets the same emote re-fire on repeat clicks. */
+export const activeEmoteState = atom<{ type: EmoteType; nonce: number } | null>({
+  key: "activeEmote",
+  default: null,
 });
 
 export const homeModalOpenState = atom<ModalOpenState>({

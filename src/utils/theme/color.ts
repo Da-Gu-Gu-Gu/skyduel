@@ -5,6 +5,7 @@ export const colors = {
   black: "#000",
   dark: "#14213d",
   orange: "#ff7e67",
+  danger: "#e63946",
 };
 
 export const customizeColors = [

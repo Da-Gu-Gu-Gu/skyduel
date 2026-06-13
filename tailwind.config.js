@@ -10,6 +10,10 @@ export default {
         black: "#000",
         dark: "#14213d",
         orange: "#ff7e67",
+        danger: "#e63946",
+      },
+      transitionTimingFunction: {
+        bounce: "cubic-bezier(0.34, 1.56, 0.64, 1)",
       },
     },
   },

@@ -1,14 +1,15 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { gsap } from "gsap";
 import useContainer from "./useContainer";
-
-const CHARACTER_BASE_Y = -0.4;
+import { playEmoteAnimation, CHARACTER_BASE_Y } from "./emoteAnimations";
+import { EMOTE_EMOJI } from "./emotes";
 
 const HomeScene = ({ inLobby = true }) => {
-  const { bodyPartColor, selectedPart } = useContainer();
+  const { bodyPartColor, selectedPart, activeEmote } = useContainer();
+  const [emoteBubble, setEmoteBubble] = useState<{ emoji: string; nonce: number } | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mount = useRef<HTMLDivElement | null>(null);
@@ -19,6 +20,8 @@ const HomeScene = ({ inLobby = true }) => {
   });
   const cylinderRefs = useRef<THREE.Mesh[]>([]);
   const entryDone = useRef<{ player: boolean; otherPlayer: boolean }>({ player: false, otherPlayer: false });
+  const isEmoting = useRef(false);
+  const emoteTimeline = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -49,7 +52,7 @@ const HomeScene = ({ inLobby = true }) => {
       const cylinderGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.6, 32);
       const cylinderMaterial = new THREE.MeshStandardMaterial({ color: 0xff006e });
       const cylinder = new THREE.Mesh(cylinderGeo, cylinderMaterial);
-      cylinder.position.set(xPosition, -1.05, 0);
+      cylinder.position.set(xPosition, -1.2, 0);
       cylinder.receiveShadow = true;
       scene.add(cylinder);
       cylinderRefs.current.push(cylinder);
@@ -95,7 +98,7 @@ const HomeScene = ({ inLobby = true }) => {
         undefined,
         (error) => {
           console.error("Error loading model", error);
-        }
+        },
       );
     };
 
@@ -109,8 +112,8 @@ const HomeScene = ({ inLobby = true }) => {
       const time = Date.now() * 0.001;
       const { player, otherPlayer } = modelRefs.current;
 
-      // Idle bounce and sway — only after entry animation completes
-      if (player && entryDone.current.player) {
+      // Idle bounce and sway — only after entry, and paused while an emote plays (GSAP owns the transform then)
+      if (player && entryDone.current.player && !isEmoting.current) {
         player.position.y = CHARACTER_BASE_Y + Math.sin(time * 2.5) * 0.08;
         player.rotation.z = Math.PI + Math.sin(time * 1.5) * 0.03;
       }
@@ -213,9 +216,33 @@ const HomeScene = ({ inLobby = true }) => {
     }
   }, [bodyPartColor, selectedPart]);
 
+  useEffect(() => {
+    if (!activeEmote) return;
+    const player = modelRefs.current.player;
+    if (!player) return;
+
+    // Interrupt any in-flight emote and take control away from the idle loop.
+    emoteTimeline.current?.kill();
+    isEmoting.current = true;
+    emoteTimeline.current = playEmoteAnimation(player, activeEmote.type, () => {
+      isEmoting.current = false;
+      emoteTimeline.current = null;
+    });
+
+    setEmoteBubble({ emoji: EMOTE_EMOJI[activeEmote.type], nonce: activeEmote.nonce });
+    const bubbleTimer = window.setTimeout(() => setEmoteBubble(null), 2800);
+
+    return () => window.clearTimeout(bubbleTimer);
+  }, [activeEmote]);
+
   return (
     <div ref={containerRef} className="w-screen z-10 h-screen flex justify-center">
       <div ref={mount} />
+      {emoteBubble && (
+        <span key={emoteBubble.nonce} className="emote-bubble pointer-events-none absolute left-1/2 top-1/3 z-30 -translate-x-1/2 text-5xl">
+          {emoteBubble.emoji}
+        </span>
+      )}
     </div>
   );
 };
