@@ -1,6 +1,4 @@
-import { useRef, useEffect } from "react";
 import { Cog6ToothIcon, FaceSmileIcon, PaintBrushIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import { gsap } from "gsap";
 import Background from "../components/Background/Background";
 import IconButton from "../components/Buttons/IconButton";
 import Header from "../components/Header/Header";
