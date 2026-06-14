@@ -8,9 +8,10 @@ import { playEmoteAnimation, CHARACTER_BASE_Y } from "./emoteAnimations";
 import { EMOTE_EMOJI } from "./emotes";
 import ReadyBadge from "../../components/ReadyBadge/ReadyBadge";
 import NameTag from "../../components/NameTag/NameTag";
+import WaitingForOpponent from "../../components/WaitingForOpponent/WaitingForOpponent";
 
 const HomeScene = ({ inLobby = true }) => {
-  const { bodyPartColor, selectedPart, activeEmote, readyState } = useContainer();
+  const { bodyPartColor, selectedPart, activeEmote, readyState, opponentJoined } = useContainer();
   const [emoteBubble, setEmoteBubble] = useState<{ emoji: string; nonce: number } | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -21,6 +22,8 @@ const HomeScene = ({ inLobby = true }) => {
     otherPlayer: null,
   });
   const cylinderRefs = useRef<THREE.Mesh[]>([]);
+  const loadOpponentRef = useRef<(() => void) | null>(null);
+  const removeOpponentRef = useRef<(() => void) | null>(null);
   const entryDone = useRef<{ player: boolean; otherPlayer: boolean }>({ player: false, otherPlayer: false });
   const isEmoting = useRef(false);
   const emoteTimeline = useRef<gsap.core.Timeline | null>(null);
@@ -103,7 +106,16 @@ const HomeScene = ({ inLobby = true }) => {
     };
 
     loadCharacter(-1, inLobby ? Math.PI / 2 + 0.2 : Math.PI / 2, true);
-    if (inLobby) loadCharacter(1, Math.PI / 2 - 0.2, false);
+    // Opponent loads/unloads reactively as they join/leave (see effect below).
+    loadOpponentRef.current = () => loadCharacter(1, Math.PI / 2 - 0.2, false);
+    removeOpponentRef.current = () => {
+      const m = modelRefs.current.otherPlayer;
+      if (m) {
+        scene.remove(m);
+        modelRefs.current.otherPlayer = null;
+        entryDone.current.otherPlayer = false;
+      }
+    };
 
     const animate = () => {
       animationFrameId.current = requestAnimationFrame(animate);
@@ -159,6 +171,13 @@ const HomeScene = ({ inLobby = true }) => {
       mount?.current?.removeChild(renderer.domElement);
     };
   }, []);
+
+  // Add/remove the opponent model as they join/leave (the scene effect above runs once on mount).
+  useEffect(() => {
+    if (!inLobby) return;
+    if (opponentJoined && !modelRefs.current.otherPlayer) loadOpponentRef.current?.();
+    else if (!opponentJoined && modelRefs.current.otherPlayer) removeOpponentRef.current?.();
+  }, [inLobby, opponentJoined]);
 
   useEffect(() => {
     const highlightBody = (mesh: THREE.Mesh, scale = 1.2) => {
@@ -243,16 +262,24 @@ const HomeScene = ({ inLobby = true }) => {
           <div className="pointer-events-none absolute left-[25%] top-[40%] z-30 -translate-x-1/2">
             <ReadyBadge ready={readyState.player} />
           </div>
-          <div className="pointer-events-none absolute left-[73%] top-[40%] z-30 -translate-x-1/2">
-            <ReadyBadge ready={readyState.opponent} />
-          </div>
           {/* TODO(backend): real player + opponent names */}
           <div className="pointer-events-none absolute left-[25%] top-[80%] z-30 -translate-x-1/2">
             <NameTag name="Player 1" />
           </div>
-          <div className="pointer-events-none absolute left-[73%] top-[80%] z-30 -translate-x-1/2">
-            <NameTag name="Player 2" />
-          </div>
+          {opponentJoined ? (
+            <>
+              <div className="pointer-events-none absolute left-[73%] top-[40%] z-30 -translate-x-1/2">
+                <ReadyBadge ready={readyState.opponent} />
+              </div>
+              <div className="pointer-events-none absolute left-[73%] top-[80%] z-30 -translate-x-1/2">
+                <NameTag name="Player 2" />
+              </div>
+            </>
+          ) : (
+            <div className="pointer-events-none absolute left-[73%] top-[45%] z-30 -translate-x-1/2">
+              <WaitingForOpponent />
+            </div>
+          )}
         </>
       )}
       {emoteBubble && (

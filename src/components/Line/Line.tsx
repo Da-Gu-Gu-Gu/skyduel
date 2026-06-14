@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect, useEffect } from "react";
 import { gsap } from "gsap";
 import useContainer from "../../pages/Home/useContainer";
+import LineGameBg from "../../assets/images/LineGameBg.svg";
 
 // Fun, high-contrast colour per countdown step (all pop against the pink bar).
 const COUNTDOWN_COLORS: Record<string, string> = {
@@ -43,6 +44,16 @@ const Line = () => {
       ref={barRef}
       className="fixed flex border-4 bg-pink border-white items-center justify-center w-auto px-3 h-[130%] -top-10  left-1/2  "
     >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-25"
+        style={{
+          backgroundImage: `url(${LineGameBg})`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "200px 200px",
+          animation: "bg-slide-up 8s linear infinite",
+        }}
+      />
       <h1
         ref={textRef}
         style={textColor ? { color: textColor } : undefined}

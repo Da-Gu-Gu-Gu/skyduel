@@ -51,6 +51,31 @@ export const lobbyReadyState = atom<LobbyReadyState>({
   default: { player: false, opponent: false },
 });
 
+/** Whether the second player has joined the lobby. FE-simulated for now; BE will drive it. */
+export const opponentJoinedState = atom<boolean>({
+  key: "opponentJoined",
+  default: false,
+});
+
+/** Whether the current client created the lobby (only the owner can start the game). */
+export const isLobbyOwnerState = atom<boolean>({
+  key: "isLobbyOwner",
+  default: false,
+});
+
+/** Transient lobby status message. `nonce` lets the same text re-fire. */
+export type StatusTone = "info" | "success" | "danger";
+export interface LobbyStatus {
+  text: string;
+  tone: StatusTone;
+  nonce: number;
+}
+
+export const lobbyStatusState = atom<LobbyStatus | null>({
+  key: "lobbyStatus",
+  default: null,
+});
+
 /** Lobby start countdown shown on the VS bar; null = idle (shows "VS"). */
 export type LobbyCountdown = 3 | 2 | 1 | "Go" | null;
 

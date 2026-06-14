@@ -1,6 +1,7 @@
-import { useRecoilState } from 'recoil'
+import { useCallback } from 'react'
+import { useRecoilState, useSetRecoilState, useResetRecoilState } from 'recoil'
 import { useNavigate } from 'react-router-dom'
-import { BodyPart, bodyPartColors, bodyPart, homeModalOpenState, ModalOpenState, activeEmoteState, lobbyReadyState, lobbyFormState, LobbyForm, lobbyCountdownState } from './store/home.store'
+import { BodyPart, bodyPartColors, bodyPart, homeModalOpenState, ModalOpenState, activeEmoteState, lobbyReadyState, lobbyFormState, LobbyForm, lobbyCountdownState, opponentJoinedState, isLobbyOwnerState, lobbyStatusState, StatusTone } from './store/home.store'
 import type { EmoteType } from './emotes'
 
 
@@ -14,6 +15,17 @@ const useContainer = () => {
     const [activeEmote, setActiveEmote] = useRecoilState(activeEmoteState)
 
     const [readyState, setReadyState] = useRecoilState(lobbyReadyState)
+
+    const [opponentJoined, setOpponentJoined] = useRecoilState(opponentJoinedState)
+
+    const [isLobbyOwner, setIsLobbyOwner] = useRecoilState(isLobbyOwnerState)
+
+    const setLobbyStatus = useSetRecoilState(lobbyStatusState)
+    const showStatus = useCallback(
+        (text: string, tone: StatusTone = "info") =>
+            setLobbyStatus(prev => ({ text, tone, nonce: (prev?.nonce ?? 0) + 1 })),
+        [setLobbyStatus],
+    )
 
     const bothReady = readyState.player && readyState.opponent
 
@@ -57,14 +69,33 @@ const useContainer = () => {
         // Generate a short, shareable lobby id (BE will own this later).
         const id = Math.random().toString(36).slice(2, 8).toUpperCase()
         setLobbyForm(prev => ({ ...prev, id }))
+        setIsLobbyOwner(true)
         modalClose()
         navigate("/lobby")
     }
 
     const submitJoinLobby = () => {
         if (!canJoinLobby) return
+        setIsLobbyOwner(false)
         modalClose()
         navigate("/lobby")
+    }
+
+    // Reset all lobby state and return to Home.
+    const resetReady = useResetRecoilState(lobbyReadyState)
+    const resetJoined = useResetRecoilState(opponentJoinedState)
+    const resetCountdown = useResetRecoilState(lobbyCountdownState)
+    const resetForm = useResetRecoilState(lobbyFormState)
+    const resetOwner = useResetRecoilState(isLobbyOwnerState)
+    const resetStatus = useResetRecoilState(lobbyStatusState)
+    const leaveLobby = () => {
+        resetReady()
+        resetJoined()
+        resetCountdown()
+        resetForm()
+        resetOwner()
+        resetStatus()
+        navigate("/")
     }
 
     const triggerEmote = (type: EmoteType) => {
@@ -118,6 +149,11 @@ const useContainer = () => {
         readyState,
         togglePlayerReady,
         setOpponentReady,
+        opponentJoined,
+        setOpponentJoined,
+        isLobbyOwner,
+        showStatus,
+        leaveLobby,
         bothReady,
         goToBattle,
         countdown,

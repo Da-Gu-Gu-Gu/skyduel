@@ -3,9 +3,10 @@ import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline"
 
 interface LobbyIdProps {
     id: string
+    label?: string
 }
 
-const LobbyId = ({ id }: LobbyIdProps) => {
+const LobbyId = ({ id, label = "Lobby ID" }: LobbyIdProps) => {
     const [copied, setCopied] = useState(false)
 
     const copy = async () => {
@@ -21,10 +22,10 @@ const LobbyId = ({ id }: LobbyIdProps) => {
     return (
         <button
             onClick={copy}
-            title="Copy lobby id"
+            title={`Copy ${label.toLowerCase()}`}
             className="flex items-center gap-3 rounded-full bg-white py-2 px-4 shadow-md transition-transform hover:scale-[1.04]"
         >
-            <span className="text-sm font-bold uppercase tracking-wide text-gray-400">Lobby ID</span>
+            <span className="text-sm font-bold uppercase tracking-wide text-gray-400">{label}</span>
             <span className="text-xl font-bold tracking-widest text-pink">{id}</span>
             {copied ? (
                 <CheckIcon className="h-5 w-5 text-[#43AA8B]" />

@@ -1,0 +1,175 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <defs>
+    <style>
+      .icon { fill: none; stroke: #34344a; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .fillp { fill: #34344a; stroke: none; }
+    </style>
+
+    <symbol id="gamepad" viewBox="0 0 100 100">
+      <path class="icon" d="M28,38 C16,38 8,48 8,62 C8,76 18,84 28,78 L36,68 L64,68 L72,78 C82,84 92,76 92,62 C92,48 84,38 72,38 C66,38 60,40 56,44 L44,44 C40,40 34,38 28,38 Z"/>
+      <path class="icon" d="M26,52 V64 M20,58 H32"/>
+      <circle class="icon" cx="68" cy="52" r="4"/>
+      <circle class="icon" cx="78" cy="62" r="4"/>
+      <circle class="icon" cx="68" cy="72" r="4"/>
+      <circle class="icon" cx="58" cy="62" r="4"/>
+    </symbol>
+
+    <symbol id="joystick" viewBox="0 0 100 100">
+      <rect class="icon" x="25" y="78" width="50" height="14" rx="3"/>
+      <line class="icon" x1="50" y1="78" x2="50" y2="35"/>
+      <circle class="icon" cx="50" cy="25" r="13"/>
+      <line class="icon" x1="35" y1="85" x2="35" y2="92"/>
+      <line class="icon" x1="65" y1="85" x2="65" y2="92"/>
+    </symbol>
+
+    <symbol id="dice" viewBox="0 0 100 100">
+      <rect class="icon" x="18" y="18" width="64" height="64" rx="10"/>
+      <circle class="fillp" cx="34" cy="34" r="4.5"/>
+      <circle class="fillp" cx="66" cy="34" r="4.5"/>
+      <circle class="fillp" cx="50" cy="50" r="4.5"/>
+      <circle class="fillp" cx="34" cy="66" r="4.5"/>
+      <circle class="fillp" cx="66" cy="66" r="4.5"/>
+    </symbol>
+
+    <symbol id="sword" viewBox="0 0 100 100">
+      <path class="icon" d="M50,6 L58,18 L58,58 L42,58 L42,18 Z"/>
+      <line class="icon" x1="28" y1="60" x2="72" y2="60"/>
+      <rect class="icon" x="44" y="60" width="12" height="24" rx="2"/>
+      <circle class="icon" cx="50" cy="90" r="6"/>
+    </symbol>
+
+    <symbol id="shield" viewBox="0 0 100 100">
+      <path class="icon" d="M50,8 L84,20 L84,52 C84,76 68,90 50,96 C32,90 16,76 16,52 L16,20 Z"/>
+      <path class="icon" d="M50,30 L60,45 L50,60 L40,45 Z"/>
+    </symbol>
+
+    <symbol id="trophy" viewBox="0 0 100 100">
+      <path class="icon" d="M32,16 H68 L64,44 C64,56 36,56 36,44 Z"/>
+      <path class="icon" d="M32,22 C16,22 16,42 32,42"/>
+      <path class="icon" d="M68,22 C84,22 84,42 68,42"/>
+      <rect class="icon" x="46" y="56" width="8" height="16"/>
+      <rect class="icon" x="32" y="72" width="36" height="10" rx="2"/>
+    </symbol>
+
+    <symbol id="crown" viewBox="0 0 100 100">
+      <path class="icon" d="M16,60 L16,32 L34,48 L50,26 L66,48 L84,32 L84,60 Z"/>
+      <rect class="icon" x="14" y="60" width="72" height="12" rx="2"/>
+      <circle class="fillp" cx="50" cy="20" r="3"/>
+    </symbol>
+
+    <symbol id="gem" viewBox="0 0 100 100">
+      <path class="icon" d="M22,36 L38,16 L62,16 L78,36 L50,88 Z"/>
+      <path class="icon" d="M22,36 H78 M38,16 L50,36 L62,16 M50,36 L50,88"/>
+    </symbol>
+
+    <symbol id="heart" viewBox="0 0 100 100">
+      <path class="icon" d="M50,90 C24,68 8,50 8,32 C8,16 22,8 34,14 C42,18 50,28 50,28 C50,28 58,18 66,14 C78,8 92,16 92,32 C92,50 76,68 50,90 Z"/>
+    </symbol>
+
+    <symbol id="star" viewBox="0 0 100 100">
+      <polygon class="icon" points="50,6 62,38 96,38 68,60 79,94 50,73 21,94 32,60 4,38 38,38"/>
+    </symbol>
+
+    <symbol id="crosshair" viewBox="0 0 100 100">
+      <circle class="icon" cx="50" cy="50" r="36"/>
+      <circle class="icon" cx="50" cy="50" r="14"/>
+      <line class="icon" x1="50" y1="4" x2="50" y2="24"/>
+      <line class="icon" x1="50" y1="76" x2="50" y2="96"/>
+      <line class="icon" x1="4" y1="50" x2="24" y2="50"/>
+      <line class="icon" x1="76" y1="50" x2="96" y2="50"/>
+    </symbol>
+
+    <symbol id="potion" viewBox="0 0 100 100">
+      <rect class="icon" x="42" y="6" width="16" height="16" rx="2"/>
+      <path class="icon" d="M38,22 H62 L76,58 C80,76 66,92 50,92 C34,92 20,76 24,58 Z"/>
+      <line class="icon" x1="30" y1="58" x2="70" y2="58"/>
+      <circle class="fillp" cx="44" cy="72" r="3"/>
+      <circle class="fillp" cx="58" cy="78" r="3"/>
+    </symbol>
+
+    <symbol id="puzzle" viewBox="0 0 100 100">
+      <path class="icon" d="M18,18 H44 C44,10 56,10 56,18 H82 V44 C90,44 90,56 82,56 V82 H56 C56,90 44,90 44,82 H18 V56 C10,56 10,44 18,44 Z"/>
+    </symbol>
+
+    <symbol id="headset" viewBox="0 0 100 100">
+      <path class="icon" d="M18,52 C18,22 82,22 82,52"/>
+      <rect class="icon" x="10" y="46" width="16" height="26" rx="6"/>
+      <rect class="icon" x="74" y="46" width="16" height="26" rx="6"/>
+      <path class="icon" d="M82,68 C82,82 70,86 60,84"/>
+      <circle class="icon" cx="58" cy="84" r="3"/>
+    </symbol>
+
+    <symbol id="lightning" viewBox="0 0 100 100">
+      <polygon class="icon" points="58,4 26,52 46,52 38,96 76,46 54,46"/>
+    </symbol>
+
+    <symbol id="mushroom" viewBox="0 0 100 100">
+      <path class="icon" d="M14,52 C14,22 86,22 86,52 Z"/>
+      <rect class="icon" x="34" y="52" width="32" height="38" rx="10"/>
+      <circle class="fillp" cx="32" cy="38" r="4"/>
+      <circle class="fillp" cx="50" cy="30" r="4"/>
+      <circle class="fillp" cx="68" cy="38" r="4"/>
+    </symbol>
+
+    <symbol id="ghost" viewBox="0 0 100 100">
+      <path class="icon" d="M18,92 V50 C18,24 32,12 50,12 C68,12 82,24 82,50 V92 L70,80 L58,92 L50,82 L42,92 L30,80 Z"/>
+      <circle class="fillp" cx="38" cy="46" r="5"/>
+      <circle class="fillp" cx="62" cy="46" r="5"/>
+    </symbol>
+
+    <symbol id="coin" viewBox="0 0 100 100">
+      <circle class="icon" cx="50" cy="50" r="38"/>
+      <circle class="icon" cx="50" cy="50" r="28"/>
+      <path class="icon" d="M50,34 V66 M58,40 C58,34 42,34 42,42 C42,50 58,50 58,58 C58,66 42,66 42,60"/>
+    </symbol>
+  </defs>
+
+  <!-- Row 1 -->
+  <g transform="translate(67,67) rotate(-8) scale(0.9)"><use href="#gamepad" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(200,67) rotate(10) scale(0.8)"><use href="#star" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(333,67) rotate(-5) scale(0.85)"><use href="#shield" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(467,67) rotate(6) scale(0.9)"><use href="#ghost" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(600,67) rotate(-12) scale(0.8)"><use href="#dice" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(733,67) rotate(8) scale(0.85)"><use href="#trophy" x="-50" y="-50" width="100" height="100"/></g>
+
+  <!-- Row 2 -->
+  <g transform="translate(67,200) rotate(-6) scale(0.85)"><use href="#coin" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(200,200) rotate(12) scale(0.8)"><use href="#heart" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(333,200) rotate(-15) scale(0.9)"><use href="#lightning" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(467,200) rotate(8) scale(0.85)"><use href="#gem" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(600,200) rotate(-10) scale(0.85)"><use href="#joystick" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(733,200) rotate(5) scale(0.8)"><use href="#crosshair" x="-50" y="-50" width="100" height="100"/></g>
+
+  <!-- Row 3 -->
+  <g transform="translate(67,333) rotate(10) scale(0.85)"><use href="#puzzle" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(200,333) rotate(-8) scale(0.8)"><use href="#crown" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(333,333) rotate(5) scale(0.9)"><use href="#mushroom" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(467,333) rotate(-12) scale(0.9)"><use href="#sword" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(600,333) rotate(8) scale(0.85)"><use href="#potion" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(733,333) rotate(-5) scale(0.85)"><use href="#headset" x="-50" y="-50" width="100" height="100"/></g>
+
+  <!-- Row 4 -->
+  <g transform="translate(67,467) rotate(6) scale(0.85)"><use href="#trophy" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(200,467) rotate(-10) scale(0.85)"><use href="#gamepad" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(333,467) rotate(12) scale(0.8)"><use href="#crosshair" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(467,467) rotate(-6) scale(0.85)"><use href="#star" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(600,467) rotate(10) scale(0.8)"><use href="#gem" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(733,467) rotate(-8) scale(0.9)"><use href="#ghost" x="-50" y="-50" width="100" height="100"/></g>
+
+  <!-- Row 5 -->
+  <g transform="translate(67,600) rotate(8) scale(0.85)"><use href="#headset" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(200,600) rotate(-5) scale(0.85)"><use href="#dice" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(333,600) rotate(12) scale(0.85)"><use href="#shield" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(467,600) rotate(-8) scale(0.85)"><use href="#joystick" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(600,600) rotate(6) scale(0.9)"><use href="#mushroom" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(733,600) rotate(-10) scale(0.8)"><use href="#heart" x="-50" y="-50" width="100" height="100"/></g>
+
+  <!-- Row 6 -->
+  <g transform="translate(67,733) rotate(10) scale(0.85)"><use href="#sword" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(200,733) rotate(-6) scale(0.85)"><use href="#potion" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(333,733) rotate(8) scale(0.8)"><use href="#coin" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(467,733) rotate(-12) scale(0.85)"><use href="#lightning" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(600,733) rotate(5) scale(0.85)"><use href="#puzzle" x="-50" y="-50" width="100" height="100"/></g>
+  <g transform="translate(733,733) rotate(-8) scale(0.8)"><use href="#crown" x="-50" y="-50" width="100" height="100"/></g>
+</svg>
