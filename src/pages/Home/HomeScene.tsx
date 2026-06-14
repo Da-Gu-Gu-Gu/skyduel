@@ -6,9 +6,11 @@ import { gsap } from "gsap";
 import useContainer from "./useContainer";
 import { playEmoteAnimation, CHARACTER_BASE_Y } from "./emoteAnimations";
 import { EMOTE_EMOJI } from "./emotes";
+import ReadyBadge from "../../components/ReadyBadge/ReadyBadge";
+import NameTag from "../../components/NameTag/NameTag";
 
 const HomeScene = ({ inLobby = true }) => {
-  const { bodyPartColor, selectedPart, activeEmote } = useContainer();
+  const { bodyPartColor, selectedPart, activeEmote, readyState } = useContainer();
   const [emoteBubble, setEmoteBubble] = useState<{ emoji: string; nonce: number } | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -58,10 +60,8 @@ const HomeScene = ({ inLobby = true }) => {
       cylinderRefs.current.push(cylinder);
     };
 
-    if (inLobby) {
-      createCylinder(-1);
-      createCylinder(1);
-    } else {
+    // Floor platform only shows on Home (single-model view); the lobby has no floor.
+    if (!inLobby) {
       createCylinder(0);
     }
 
@@ -102,8 +102,8 @@ const HomeScene = ({ inLobby = true }) => {
       );
     };
 
-    loadCharacter(-1, Math.PI / 2, true);
-    if (inLobby) loadCharacter(1, Math.PI / 2, false);
+    loadCharacter(-1, inLobby ? Math.PI / 2 + 0.2 : Math.PI / 2, true);
+    if (inLobby) loadCharacter(1, Math.PI / 2 - 0.2, false);
 
     const animate = () => {
       animationFrameId.current = requestAnimationFrame(animate);
@@ -238,6 +238,23 @@ const HomeScene = ({ inLobby = true }) => {
   return (
     <div ref={containerRef} className="w-screen z-10 h-screen flex justify-center">
       <div ref={mount} />
+      {inLobby && (
+        <>
+          <div className="pointer-events-none absolute left-[25%] top-[40%] z-30 -translate-x-1/2">
+            <ReadyBadge ready={readyState.player} />
+          </div>
+          <div className="pointer-events-none absolute left-[73%] top-[40%] z-30 -translate-x-1/2">
+            <ReadyBadge ready={readyState.opponent} />
+          </div>
+          {/* TODO(backend): real player + opponent names */}
+          <div className="pointer-events-none absolute left-[25%] top-[80%] z-30 -translate-x-1/2">
+            <NameTag name="Player 1" />
+          </div>
+          <div className="pointer-events-none absolute left-[73%] top-[80%] z-30 -translate-x-1/2">
+            <NameTag name="Player 2" />
+          </div>
+        </>
+      )}
       {emoteBubble && (
         <span key={emoteBubble.nonce} className="emote-bubble pointer-events-none absolute left-1/2 top-1/3 z-30 -translate-x-1/2 text-5xl">
           {emoteBubble.emoji}

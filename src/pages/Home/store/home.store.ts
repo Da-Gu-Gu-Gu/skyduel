@@ -40,6 +40,36 @@ export const activeEmoteState = atom<{ type: EmoteType; nonce: number } | null>(
   default: null,
 });
 
+/** Ready state for the lobby. `opponent` is FE-simulated for now; BE will drive it later. */
+export interface LobbyReadyState {
+  player: boolean;
+  opponent: boolean;
+}
+
+export const lobbyReadyState = atom<LobbyReadyState>({
+  key: "lobbyReadyState",
+  default: { player: false, opponent: false },
+});
+
+/** Lobby start countdown shown on the VS bar; null = idle (shows "VS"). */
+export type LobbyCountdown = 3 | 2 | 1 | "Go" | null;
+
+export const lobbyCountdownState = atom<LobbyCountdown>({
+  key: "lobbyCountdown",
+  default: null,
+});
+
+/** Inputs for the create/join lobby modals. */
+export interface LobbyForm {
+  id: string;
+  passCode: string;
+}
+
+export const lobbyFormState = atom<LobbyForm>({
+  key: "lobbyForm",
+  default: { id: "", passCode: "" },
+});
+
 export const homeModalOpenState = atom<ModalOpenState>({
   key: "homeModalOpenState",
   default: {

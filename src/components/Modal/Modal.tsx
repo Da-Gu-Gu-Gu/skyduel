@@ -25,6 +25,8 @@ export interface ModalProps {
   label?: string;
   isCenter?: boolean;
   size?: ModalSize;
+  /** Disables only the submit button (Cancel stays clickable). */
+  submitDisable?: boolean;
 }
 const Modal = ({
   children,
@@ -37,6 +39,7 @@ const Modal = ({
   onSubmit,
   label = "Save",
   size = "md",
+  submitDisable = false,
 }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +56,7 @@ const Modal = ({
       {children}
       <div className="flex gap-3 p-3 pt-0 items-center justify-end">
         <Button label={"Cancel"} loading={loading} disable={disable} onClick={() => setClose()} bgColor={colors.white} textColor={"gray"} />
-        <Button label={label} loading={loading} disable={disable} onClick={onSubmit} bgColor={colors.purple} textColor={colors.white} />
+        <Button label={label} loading={loading} disable={disable || submitDisable} onClick={onSubmit} bgColor={colors.purple} textColor={colors.white} />
       </div>
     </div>
   );
