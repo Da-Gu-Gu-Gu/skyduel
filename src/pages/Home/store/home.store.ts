@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom, AtomEffect } from "recoil";
 import type { EmoteType } from "../emotes";
 
 export interface BodyPartColors {
@@ -7,6 +7,30 @@ export interface BodyPartColors {
   Eye: string;
   Ear: string;
 }
+
+const CHARACTER_COLORS_KEY = "skyduel.characterColors";
+
+/**
+ * Persists the character colour config to localStorage so a player's customization
+ * survives reloads. Hydrates the atom on init and writes back on every change.
+ */
+const persistCharacterColors: AtomEffect<BodyPartColors> = ({ setSelf, onSet }) => {
+  if (typeof window === "undefined") return;
+
+  const saved = localStorage.getItem(CHARACTER_COLORS_KEY);
+  if (saved) {
+    try {
+      setSelf(JSON.parse(saved) as BodyPartColors);
+    } catch {
+      // Corrupt value — ignore and keep the default.
+    }
+  }
+
+  onSet((newValue, _old, isReset) => {
+    if (isReset) localStorage.removeItem(CHARACTER_COLORS_KEY);
+    else localStorage.setItem(CHARACTER_COLORS_KEY, JSON.stringify(newValue));
+  });
+};
 
 export type BodyPart = keyof BodyPartColors;
 
@@ -27,11 +51,18 @@ export const bodyPartColors = atom<BodyPartColors>({
     Eye: "#0000FF",
     Ear: "#FFFF00",
   },
+  effects: [persistCharacterColors],
 });
 
 export const bodyPart = atom<BodyPart>({
   key: "bodyPart",
   default: "Body",
+});
+
+/** Whether UI sound effects (e.g. the button click blip) play. Toggled in Settings. */
+export const soundEnabledState = atom<boolean>({
+  key: "soundEnabled",
+  default: true,
 });
 
 /** The most recently triggered emote. `nonce` lets the same emote re-fire on repeat clicks. */

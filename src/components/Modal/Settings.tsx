@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useRecoilState } from "recoil";
 import { ArrowRightOnRectangleIcon, MusicalNoteIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline";
 import Modal, { ModalProps } from "./Modal";
+import useAuth from "../../hooks/useAuth";
+import { soundEnabledState } from "../../pages/Home/store/home.store";
 
 type ToggleRowProps = {
   label: string;
@@ -30,11 +33,12 @@ const ToggleRow = ({ label, icon, value, onChange }: ToggleRowProps) => (
 
 const SettingsModal = (props: ModalProps) => {
   const [music, setMusic] = useState(true);
-  const [sound, setSound] = useState(true);
+  const [sound, setSound] = useRecoilState(soundEnabledState);
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    // No auth/session layer yet — close the panel for now. Wire real sign-out here later.
     props.setClose();
+    logout();
   };
 
   return (

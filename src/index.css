@@ -58,3 +58,22 @@
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+  /* ---- Cinematic game-launcher login screen ---- */
+
+  /* Slow rotating conic "god-ray" glow behind the sign-in panel */
+  @keyframes ray-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Metallic sheen that sweeps across the title text */
+  @keyframes title-sheen {
+    0%   { background-position: -150% 0; }
+    60%, 100% { background-position: 250% 0; }
+  }
+
+  /* Faint background haze that slowly breathes */
+  @keyframes haze-breathe {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50%      { opacity: 0.6; transform: scale(1.08); }
+  }

@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
-import { useRecoilState, useSetRecoilState, useResetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil'
 import { useNavigate } from 'react-router-dom'
-import { BodyPart, bodyPartColors, bodyPart, homeModalOpenState, ModalOpenState, activeEmoteState, lobbyReadyState, lobbyFormState, LobbyForm, lobbyCountdownState, opponentJoinedState, isLobbyOwnerState, lobbyStatusState, StatusTone } from './store/home.store'
+import { BodyPart, bodyPartColors, bodyPart, homeModalOpenState, ModalOpenState, activeEmoteState, lobbyReadyState, lobbyFormState, LobbyForm, lobbyCountdownState, opponentJoinedState, isLobbyOwnerState, lobbyStatusState, StatusTone, soundEnabledState } from './store/home.store'
 import type { EmoteType } from './emotes'
+import { playEmoteSound } from '../../utils/sound/emote'
 
 
 const useContainer = () => {
@@ -13,6 +14,7 @@ const useContainer = () => {
     const [modalOpenState, setModalOpenState] = useRecoilState(homeModalOpenState)
 
     const [activeEmote, setActiveEmote] = useRecoilState(activeEmoteState)
+    const soundEnabled = useRecoilValue(soundEnabledState)
 
     const [readyState, setReadyState] = useRecoilState(lobbyReadyState)
 
@@ -99,6 +101,7 @@ const useContainer = () => {
     }
 
     const triggerEmote = (type: EmoteType) => {
+        if (soundEnabled) playEmoteSound(type)
         setActiveEmote(prev => ({ type, nonce: (prev?.nonce ?? 0) + 1 }))
     }
 
