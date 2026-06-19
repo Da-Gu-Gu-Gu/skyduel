@@ -1,10 +1,13 @@
 import { renderHook, act } from '@testing-library/react'
 import { RecoilRoot } from 'recoil'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
 import useContainer from './useContainer'
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <RecoilRoot>{children}</RecoilRoot>
+  <MemoryRouter>
+    <RecoilRoot>{children}</RecoilRoot>
+  </MemoryRouter>
 )
 
 describe('useContainer', () => {
